@@ -10,39 +10,14 @@ class Tag(models.Model):
 	def __str__(self):
 		return self.name
 
-class Manager(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	name = models.CharField(max_length=30)
+#class Manager(models.Model):
+#	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#	name = models.CharField(max_length=30)
 
 class Program(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	address = models.IntegerField()
+	address = models.IntegerField(blank=True, null=True)
 	title = models.CharField(max_length=50)
-
-
-class ProjectnGrant(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	grant = models.IntegerField()
-	general_program = models.ForeignKey(
-		Program, models.SET_NULL, blank=True, null=T)
-	#another entity for many to many
-	#so that for every connection there is one
-	#connection with a new class object connection
-	tags = models.ManyToManyField(Tag)
-	#duration = models.DurationField()
-	start_time = models.DateTimeField(null=False)
-	end_time = models.DateTimeField(null=False)
-
-	duration = models.IntegerField()
-
-	summary = models.CharField(max_length = 3000)
-
-	def save(self, *args, **kwargs):
-		self.duration = (self.end_time - self.start_time).days//360
-		super(ProjectnGrant, self).save(*args, **kwargs)
-	
-	#def duration(self):
-	#	return (self.end_time - self.start_time).days/360
 
 class ResearchCenter(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -60,7 +35,7 @@ class Company(models.Model):
 	equity_capital = models.FloatField()
 
 class Organization(models.Model):
-	ORGANIZATION_TYPE_CHOISES = [
+	ORGANIZATION_TYPE_CHOICES = [
 		(1, "Company"),
 		(2, "University"),
 		(3, "ResearchCenter"),
@@ -73,9 +48,10 @@ class Organization(models.Model):
 	zip_code = models.CharField(max_length=7)
 	city = models.CharField(max_length=20)
 	self_street = models.CharField(max_length=30)
-	org_type = models.IntegerField(choises=ORGANIZATION_TYPE_CHOISES)
+	org_type = models.IntegerField(choices=ORGANIZATION_TYPE_CHOICES)
 
 	is_a = None
+
 
 	def save(self, *args, **kwargs):
 		if(self.org_type == 1):
@@ -105,6 +81,40 @@ class Organization(models.Model):
 	#class Meta:
     #    abstract = True
 
+class ProjectnGrant(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	grant = models.IntegerField()
+	general_program = models.ForeignKey(
+		Program, models.SET_NULL, blank=True, null=True)
+	#manager = models.ForeignKey(
+	#	Manager, models.SET_NULL, blank=True, null=True)
+	#research_manager = models.ForeignKey(
+	#	Researcher, models.SET_NULL, blank=True, null=True)
+	#another entity for many to many
+	#so that for every connection there is one
+	#connection with a new class object connection
+	tags = models.ManyToManyField(Tag)
+	#duration = models.DurationField()
+	start_time = models.DateTimeField(null=False)
+	end_time = models.DateTimeField(null=False)
+
+	duration = models.IntegerField(default=555)
+
+	summary = models.CharField(max_length = 3000, default="al")
+
+	is_evaluated = models.BooleanField(default=False, editable=False)
+	assesment = None
+	
+	#researchers = []
+	deliveries = []
+
+	def save(self, *args, **kwargs):
+		self.duration = (self.end_time - self.start_time).days//360
+		super(ProjectnGrant, self).save(*args, **kwargs)
+	
+	#def duration(self):
+	#	return (self.end_time - self.start_time).days/360
+
 class Researcher(models.Model):
 	GENDER_TYPE_CHOICES = [
         (1, "male"),
@@ -122,8 +132,23 @@ class Researcher(models.Model):
 
 	age = models.IntegerField(default = 550)
 
-class WorksAt(models.Model):
-	researcher = models.ForeignKey(
+	works_at = models.ForeignKey(
+		Organization, on_delete=models.CASCADE, default= Organization.objects.first()
+	)
+
+class Assessment(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	evaluation = models.IntegerField(default=99)
+	date = models.DateTimeField(null = False)
+	resercher_who_evaluates = models.ForeignKey(
 		Researcher, on_delete=models.CASCADE
+	)
+
+class Delivery(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	title = models.CharField(max_length = 70)
+	summary = models.CharField(max_length= 1000)
+	project_and_grant = models.ForeignKey(
+		ProjectnGrant, on_delete=models.CASCADE
 	)
 
