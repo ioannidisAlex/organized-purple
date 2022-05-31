@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<style type="text/css">
+
+.column {
+	float: left;
+	width: 600px;
+
+}
+.column2 {
+  float: right;
+  width: 50.00%;
+  /*width: 50.00%;*/
+  padding: 0px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.right {
+  float: right;
+  width: 300px;
+  border: 3px solid #73AD21;
+  padding: 10px;
+}
+/* Container holding the image and the text */
+.container {
+  position: relative;
+}
+
+/* Bottom right text */
+/* Style the tab buttons */
+.tablink {
+  background-color: rgb(42, 127, 153);
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 11.5px 13.5px;
+  font-size: 20px;
+  width: 100%;
+}
+
+/* Change background color of buttons on hover */
+.tablink:hover {
+  background-color: rgb(0, 0, 0);
+}
+
+/* Set default styles for tab content */
+.tabcontent {
+  color: #ffffff;
+  display: none;
+  padding: 0px;
+  text-align: center;
+}
+.headerz{
+
+background-image: url("../media/image2.jpg");
+
+}
+
+/* Style each tab content individually */
+
+</style>
+<h2>Καλώς ορίσατε στην εφαρμογή ηλεκτροκίνησης!</h2>
+<p></p>
+<a href="{% url 'generate' %}"> bulk create</a>
+
+{% endblock content %}

@@ -13,9 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required, permission_required
+from django.urls import include, path, re_path
+from django.utils import timezone
+
+from digio import views as common_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", common_views.home, name="home"),
+    path("home/", common_views.home, name="home"),
+    path('create-program/', common_views.createProgram, name="createProgram"),
+    path('generate/', common_views.generate_objects, name="generate"),
 ]
