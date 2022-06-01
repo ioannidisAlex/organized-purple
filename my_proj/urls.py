@@ -28,5 +28,5 @@ urlpatterns = [
     path("", common_views.home, name="home"),
     path("home/", common_views.home, name="home"),
     path('create-program/', common_views.createProgram, name="createProgram"),
-    path('generate/', common_views.generate_objects, name="generate"),
+    path('generate/', common_views.generate_researchers, name="generate"),
 ]
