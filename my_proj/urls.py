@@ -21,6 +21,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import include, path, re_path
 from django.utils import timezone
 
+from django.views.generic import TemplateView
+
 from digio import views as common_views
 
 urlpatterns = [
@@ -29,4 +31,9 @@ urlpatterns = [
     path("home/", common_views.home, name="home"),
     path('create-program/', common_views.createProgram, name="createProgram"),
     path('generate/', common_views.generate_researchers, name="generate"),
-]
+    path('testQuery/', common_views.TestDbCursor.as_view(), name="testQ"),
+    path('selectAll/', common_views.AllOfThem.as_view(), name='selectAll'),
+    path('searchResearchers/', common_views.IdToResearchers.as_view(), name='showResearchers'),
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

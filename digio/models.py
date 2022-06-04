@@ -66,10 +66,10 @@ class Organization(models.Model):
 			self.is_a = Company.objects.create(
 								equity_capital= 1023.12)
 		elif(self.org_type == 2):
-			self.is_a = University.objects.create(budget_from_the_ministry_of_education=70000000)
+			self.is_a = University.objects.create(budget_from_the_ministry_of_education=70000000.0)
 		else:
-			self.is_a = ResearchCenter.objects.create(budget_from_private_actions=123000,
-														budget_from_the_ministry_of_education=200000)
+			self.is_a = ResearchCenter.objects.create(budget_from_private_actions=123000.0,
+														budget_from_the_ministry_of_education=200000.0)
 		super(Organization, self).save(*args, **kwargs)
 	#abstract see lass class meta
 
@@ -91,9 +91,16 @@ class Organization(models.Model):
 	#class Meta:
     #    abstract = True
 
+class Manager(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	name = models.CharField(max_length=30)
+
+
 class ProjectnGrant(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	grant = models.IntegerField(default="10000")
+	manager = models.ForeignKey(
+		Manager, models.SET_NULL, blank=True, null=True)
 	general_program = models.ForeignKey(
 		Program, models.SET_NULL, blank=True, null=True)
 	#manager = models.ForeignKey(
@@ -143,7 +150,7 @@ class Researcher(models.Model):
 	age = models.IntegerField(default = 550)
 
 	works_at = models.ForeignKey(
-		Organization, on_delete=models.CASCADE, default= Organization.objects.first()
+		Organization, on_delete=models.CASCADE, default= Organization.objects.first().pk
 	)
 
 class Assessment(models.Model):

@@ -4,6 +4,40 @@
 {% block content %}
 <style type="text/css">
 
+body {
+	background-image: url("{{MEDIA_URL}}/media/cake.jpg");
+	background-color: #fcfcfc;
+}
+
+h2{
+	color: #443850;
+}
+
+p {
+	color: #B78E88;
+}
+
+a {
+	background-color: #FED766;
+	font-size: 24px;
+	color: #124A71;
+}
+ul.b {list-style-type: square;}
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+li {
+  padding-left: 1.6em; 
+  text-indent: -.7em;
+}
+
+li::before {
+  content: "•   ";
+  color: black; /* or whatever color you prefer */
+}
+
 .column {
 	float: left;
 	width: 600px;
@@ -61,15 +95,87 @@
 }
 .headerz{
 
-background-image: url("../media/image2.jpg");
 
 }
 
 /* Style each tab content individually */
 
 </style>
-<h2>Καλώς ορίσατε στην εφαρμογή ηλεκτροκίνησης!</h2>
-<p></p>
-<a href="{% url 'generate' %}"> bulk create</a>
 
+<div id="main">
+  <header>
+	<div id="logo">
+		<div id="logo_text">
+		<h1>
+			<p
+			>TechIt<span class="logo_colour"> Serious</span></p>
+		</h1>
+		<h2>Καλώς ορίσατε στην ιδρυματική εφαρμογή!</h>
+		</div>
+	</div>
+	<nav>
+		<ul class="sf-menu" id="nav">
+		<li class="selected"><a href="{% url 'generate' %}">Home</a></li>
+		<li><a href="{% url 'selectAll' %}">Query them All</a></li>
+		<li>
+			<a href="{% url 'generate' %}">Product Data</a>
+
+			<ul>
+			<li>
+				<a href="{% url 'testQ' %}">Query ONE</a>
+			</li>
+			<li><a href="{% url 'generate' %}">Top popular positions</a></li>
+			<li><a href="{% url 'generate' %}">Trust in Label</a></li>
+			<li>
+				<a href="{% url 'generate' %}">Total amount spent per hour</a>
+			</li>
+			<li>
+				<a href="{% url 'generate' %}">Percentage of transactions per age group</a>
+			</li>
+
+			<li><a href="{% url 'generate' %}">Personal Query #1</a></li>
+			<li><a href="{% url 'generate' %}">Personal Query #2</a></li>
+		</ul>
+		</li>
+		<li>
+			<a href="{% url 'generate' %}">Views</a>
+
+			<ul>
+			<li>
+				<a href="{% url 'generate' %}">Sales per category per store</a>
+			</li>
+			<li><a href="{% url 'generate' %}">Customer Info</a></li>
+		</ul>
+		</li>
+		<li>
+			<a href="{% url 'generate' %}">Edit Data</a>
+
+		<ul>
+			<li><a href="{% url 'generate' %}">Stores</a></li>
+			<li><a href="{% url 'generate' %}">Customers</a></li>
+			<li><a href="{% url 'generate' %}">Products</a></li>
+			<li><a href="{% url 'generate' %}">View past prices</a></li>
+		</ul>
+		</li>
+		<li>
+			<a href="{% url 'generate' %}">Contact Us</a>
+		</li>
+		</ul>
+	</nav>
+	</header>
+	<div id="site_content">
+	<div class="content">
+		<img
+		src=""
+		/>
+	</div>
+	</div>
+	<footer>
+	<p>
+	Copyright &copy; Ioannidis Alexandros
+	2022
+	</p>
+	</footer>
+</div>
+<p>&nbsp;</p>
 {% endblock content %}
