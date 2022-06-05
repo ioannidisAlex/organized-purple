@@ -36,6 +36,9 @@ urlpatterns = [
     path('searchResearchers/', common_views.IdToResearchers.as_view(), name='showResearchers'),
     path('viewProjects/', common_views.IdToGrants.as_view(), name='viewProjects'),
     path('viewResearcher/', common_views.ResearcherInfo.as_view(), name='viewResearcher'),
+    path('perTag/', common_views.TagNGrants.as_view(), name="perTag"),
+    path('orgzHaveShame/', common_views.OrganizationSame.as_view(), name="orgzHaveShame"),
+    path('topTags/', common_views.TopTags.as_view(),name="topTags"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

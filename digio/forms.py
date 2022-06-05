@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Program
+from .models import Program, Tag
 from django import forms
 
 class ProgramForm(ModelForm):
@@ -17,3 +17,9 @@ class AllOfThem(forms.Form):
 
 class ViewProjects(forms.Form):
 	id = forms.CharField(max_length=45)
+
+class SelectTag(ModelForm):
+	id = forms.CharField(max_length=45)
+	class Meta:
+		model = Tag
+		fields = ['name']

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+{% load tagname %} 
+<p id="alefa"></p>
+<table id="dtBasicExample" class="table table-bordered table-striped"></table>
+
+<table>
+	<tr>
+	{% for i in data|slice:":1" %}
+		{% for j,k in i.items %}
+
+			{% for y,u in k.items %}
+				<td>{{y}}</td>
+			{% endfor %}
+		{% endfor %}
+	{% endfor %}
+	</tr>
+	{% for i in data %}
+		<tr>
+		{% for j,k in i.items %}
+			
+			{% for y,u in k.items %}
+				<td>{{u}}</td>
+			{% endfor %}
+			
+		{% endfor %}
+		</tr>
+	{% endfor %}
+</table>
+</table>
+	<!--<table id="dtBasicExample" class="tablesorter"></table>	-->
+<script>		
+
+
+	//ok += String('{{ data.items }}')
+	//if (typeof ok === 'string')
+	//	document.getElementById("alefa").innerHTML = ok;
+	//console.log(ok);
+	/*var table = ''
+	var thead = '<thead class="thead-light">';
+	{% for key, value in data %} {
+		thead += '<th class="filter-exact" data-placeholder="** Finder **">'+key+'</th>'; }
+	{% endfor %}
+	if (typeof ok === 'string')
+		document.getElementById("alefa").innerHTML = ok;
+	thead += '</thead>';
+	var tbody = '<tbody>';
+	{% for key, value in data %}{
+
+			tbody += '<tr>';
+			// skip first
+			for(const [k, v] of value){
+				//console.log(key);
+				//if (key!="password" && key!="is_active")
+				//if((key == 'SessionsSummaryList')){
+				//	tbody += '<td>';
+				//	for(var key2 in response.data[key][i]){
+				//		tbody +=key2 + ':' + response.data[key][i][key2]+'<br></br>';
+				//	}
+				//	tbody += '</td>';
+				//}
+
+				//else{
+					tbody += '<td>'+v+'</td>';
+
+				//}
+				 
+			}
+			tbody += '</tr>';
+		}
+	{% endfor %}
+	tbody += '</tbody>';
+	table += thead;
+	table += tbody;
+	document.getElementById('dtBasicExample').innerHTML = table;
+	console.log(table)*/
+</script>
+{% endblock content %}

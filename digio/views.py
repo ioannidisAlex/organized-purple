@@ -18,6 +18,7 @@ from .forms import (
 	TabsPerSix,
 	AllOfThem,
 	ViewProjects,
+	SelectTag,
 )
 
 import datetime
@@ -215,6 +216,114 @@ class ResearcherInfo(View):
 			"data" : data
 		}
 		return render(request, 'show_info.html', context)
+
+class TagNGrants(View):
+	template_name = "select_tag.html"
+	form_class = SelectTag
+
+	def get(self, request, *args, **kwargs):
+		query = """ SELECT * FROM digio_tag;
+		"""
+		cursor.execute(query)
+		lst = dictfetchall(cursor)
+		data = [
+			{
+				"x" : grant,
+				"all" : s
+			}
+    		for grant, s in enumerate(lst)
+		]
+		context = {
+			"data" : data,
+			"form" : self.form_class()
+		}
+		return render(request, self.template_name, context)
+
+	def post(self, request, *args, **kwargs):
+		id = request.POST["id"]
+		# subquery = 					SELECT * FROM digio_researcher, digio_projectngrant WHERE (digio_projectngrant.id, digio_projectngrant.grant, digio_projectngrant.end_time, digio_projectngrant.general_program_id )= ANY (
+		#           CREATE OR REPLACE VIEW grants AS
+		query = """ 
+					
+					SELECT *
+					FROM digio_projectngrant 
+					WHERE digio_projectngrant.id in (SELECT digio_projectngrant_tags.projectngrant_id
+								FROM digio_projectngrant_tags
+								WHERE tag_id = %s
+										) AND 
+								(CURRENT_TIMESTAMP BETWEEN 
+								digio_projectngrant.start_time AND 
+								digio_projectngrant.end_time); 
+				"""
+					#Go
+					#SELECT *FROM (digio_researcher JOIN digio_researcher_project 
+					#ON digio_researcher.id = digio_researcher_project.researcher_id;
+					#) as t JOIN digio_projectngrant
+					#ON digio_projectngrant.id = t.id 
+					#WHERE digio_projectngrant.id = ANY grants.id
+
+					#Go
+		cursor.execute(query,(id,))
+		lst = dictfetchall(cursor)
+		data = [
+			{
+				"x" : researcher_index,
+				"all" : s
+			}
+    		for researcher_index, s in enumerate(lst)
+		]
+		context = {
+			"data" : data
+		}
+		return render(request, 'select_tag.html', context)
+
+class OrganizationSame(View):
+	template_name = "pop.html"
+
+	def get(self, request, *args, **kwargs):
+		query = """ SELECT *
+					FROM digio_program
+		"""
+		cursor.execute(query)
+		lst = dictfetchall(cursor)
+		data = [
+			{
+				"x" : researcher_index,
+				"all" : s
+			}
+    		for researcher_index, s in enumerate(lst)
+		]
+		context = {
+			"data" : data,
+		}
+		return render(request, 'pop.html', context)
+
+class TopTags(View):
+	template_name = "show_top_tags.html"
+
+	def get(self, request, *args, **kwargs):
+		query = """
+					SELECT taga.tag_id as tag_id1, tagb.tag_id as tag_id2, count(*) as TOTAL
+					from digio_projectngrant_tags taga, digio_projectngrant_tags tagb
+					WHERE taga.id <> tagb.id AND taga.projectngrant_id = tagb.projectngrant_id 
+					GROUP BY taga.tag_id, tagb.tag_id
+					ORDER BY TOTAL DESC
+					LIMIT 3
+		"""
+		cursor.execute(query)
+		lst = dictfetchall(cursor)
+		data = [
+			{
+				"x" : researcher_index,
+				"all" : s
+			}
+    		for researcher_index, s in enumerate(lst)
+		]
+		context = {
+			"data" : data
+		}
+		return render(request, "show_top_tags.html", context)
+
 
 class TestDbCursor(View):
 	template_name = "test.html"
