@@ -14,3 +14,6 @@ class TabsPerSix(forms.Form):
 class AllOfThem(forms.Form):
 	search_date = forms.DateTimeField()
 	duration = forms.CharField(required=False)
+
+class ViewProjects(forms.Form):
+	id = forms.CharField(max_length=45)

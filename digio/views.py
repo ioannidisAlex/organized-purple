@@ -17,6 +17,7 @@ from .forms import (
 	ProgramForm,
 	TabsPerSix,
 	AllOfThem,
+	ViewProjects,
 )
 
 import datetime
@@ -96,10 +97,12 @@ class IdToResearchers(View):
 
 	def post(self, request, *args, **kwargs):
 		id = request.POST["id"]
-		query = """ SELECT id, surname
-					FROM digio_researcher
-					WHERE digio_researcher.project_id = %s;
-		"""
+		#query = """ SELECT id, surname FROM digio_researcher WHERE digio_researcher.project_id = %s;"""
+		query = """ SELECT digio_researcher.id 
+					FROM digio_researcher 
+					INNER JOIN digio_researcher_project 
+					ON digio_researcher.id = digio_researcher_project.researcher_id 
+					WHERE digio_researcher_project.projectngrant_id = %s """
 		cursor.execute(query,(id,))
 		lst = dictfetchall(cursor)
 		data = [
@@ -113,6 +116,105 @@ class IdToResearchers(View):
 			"data" : data
 		}
 		return render(request, self.template_name, context)
+
+class IdToProjects(View):
+	template_name = "show_grants.html"
+
+	def get(self, request, *args, **kwargs):
+		query = """ CREATE VIEW asd
+					SELECT *
+					FROM digio_researcher_project 
+					INNER JOIN digio_projectngrant as t
+					ON digio_projectngrant.id = digio_researcher_project.projectngrant_id 
+		"""
+
+class IdToGrants(View):
+	template_name = "show_grants.html"
+	form_class = ViewProjects
+
+	def get(self, request, *args, **kwargs):
+		query = """ SELECT *FROM digio_researcher JOIN digio_researcher_project 
+					ON digio_researcher.id = digio_researcher_project.researcher_id;
+		"""
+		cursor.execute(query)
+		lst = dictfetchall(cursor)
+		data = [
+			{
+				"x" : grant,
+				"all" : s
+			}
+    		for grant, s in enumerate(lst)
+		]
+		context = {
+			"data" : data,
+			"form" : self.form_class()
+		}
+		return render(request, self.template_name, context)
+
+	def post(self, request, *args, **kwargs):
+		id = request.POST["id"]
+		#query = """ SELECT id, surname FROM digio_researcher WHERE digio_researcher.project_id = %s;"""
+		query = """ SELECT digio_researcher_project.projectngrant_id
+					FROM digio_researcher_project 
+					INNER JOIN digio_projectngrant
+					ON digio_projectngrant.id = digio_researcher_project.projectngrant_id 
+					WHERE digio_researcher_project.researcher_id = %s """
+		cursor.execute(query,(id,))
+		lst = dictfetchall(cursor)
+		data = [
+			{
+				"x" : researcher_index,
+				"all" : s
+			}
+    		for researcher_index, s in enumerate(lst)
+		]
+		context = {
+			"data" : data
+		}
+		return render(request, 'show_grants.html', context)
+
+class ResearcherInfo(View):
+	template_name = "show_info.html"
+	form_class = ViewProjects
+
+	def get(self, request, *args, **kwargs):
+		query = """ SELECT *FROM digio_researcher JOIN digio_researcher_project 
+					ON digio_researcher.id = digio_researcher_project.researcher_id;
+		"""
+		cursor.execute(query)
+		lst = dictfetchall(cursor)
+		data = [
+			{
+				"x" : grant,
+				"all" : s
+			}
+    		for grant, s in enumerate(lst)
+		]
+		context = {
+			"data" : data,
+			"form" : self.form_class()
+		}
+		return render(request, self.template_name, context)
+
+	def post(self, request, *args, **kwargs):
+		id = request.POST["id"]
+		#query = """ SELECT id, surname FROM digio_researcher WHERE digio_researcher.project_id = %s;"""
+		query = """ SELECT name, surname, gender
+					FROM digio_researcher
+					WHERE digio_researcher.id = %s """
+		cursor.execute(query,(id,))
+		lst = dictfetchall(cursor)
+		data = [
+			{
+				"x" : researcher_index,
+				"all" : s
+			}
+    		for researcher_index, s in enumerate(lst)
+		]
+		context = {
+			"data" : data
+		}
+		return render(request, 'show_info.html', context)
 
 class TestDbCursor(View):
 	template_name = "test.html"

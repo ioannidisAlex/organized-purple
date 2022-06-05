@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+{% load tagname %} 
+<div class="content-section">
+        <form method="POST" action="/viewProjects/">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Insert Researcher's id</legend>
+                {{ form }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+</div>
+<p id="alefa"></p>
+<table id="dtBasicExample" class="table table-bordered table-striped"></table>
+<table>
+	<tr>
+	{% for i in data|slice:":1" %}
+		{% for j,k in i.items %}
+
+			{% for y,u in k.items %}
+				<td>{{y}}</td>
+			{% endfor %}
+		{% endfor %}
+	{% endfor %}
+	</tr>
+	{% for i in data %}
+		<tr>
+		{% for j,k in i.items %}
+			
+			{% for y,u in k.items %}
+				<td>{{u}}</td>
+			{% endfor %}
+			
+		{% endfor %}
+		</tr>
+	{% endfor %}
+</table>
+</table>
+{% endblock content %}

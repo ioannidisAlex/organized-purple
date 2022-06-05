@@ -34,6 +34,8 @@ urlpatterns = [
     path('testQuery/', common_views.TestDbCursor.as_view(), name="testQ"),
     path('selectAll/', common_views.AllOfThem.as_view(), name='selectAll'),
     path('searchResearchers/', common_views.IdToResearchers.as_view(), name='showResearchers'),
+    path('viewProjects/', common_views.IdToGrants.as_view(), name='viewProjects'),
+    path('viewResearcher/', common_views.ResearcherInfo.as_view(), name='viewResearcher'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

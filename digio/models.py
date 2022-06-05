@@ -3,6 +3,7 @@ import datetime
 import random
 
 from django.db import models
+from digio.utils import CreateView
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
@@ -139,8 +140,8 @@ class Researcher(models.Model):
         (3, "prefer not to say"),
     ]
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	project = models.ForeignKey(
-		ProjectnGrant, on_delete=models.CASCADE
+	project = models.ManyToManyField(
+		ProjectnGrant
 	)
 	name = models.CharField(max_length=40)
 	surname = models.CharField(max_length=40)
